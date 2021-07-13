@@ -1,14 +1,22 @@
 const express = require('express')
 const bodyParser = require('body-parser');
 const cors = require('cors');
-const ObjectId = require('mongodb').ObjectID;
+// const ObjectId = require('mongodb').ObjectID;
 const { MongoClient } = require('mongodb');
+const admin = require("firebase-admin");
 require('dotenv').config();
 const port = process.env.PORT || 5000;
 
 // Mongodb connection:
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.xgsrn.mongodb.net/${process.env.DB_BLOGS}?retryWrites=true&w=majority`;
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+
+// Google service account:
+const serviceAccount = require("./configs/domainamex-firebase-adminsdk-bymxj-45a863d756.json");
+admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount)
+});
+
 
 // Call the all packages:
 const app = express()
