@@ -31,11 +31,13 @@ app.get('/', (req, res) => {
 // Connect mongodb collection:
 client.connect(err => {
     const blogsCollection = client.db(`${process.env.DB_MYDATA}`).collection(`${process.env.DB_BLOGS}`);
+    const commentsCollection = client.db(`${process.env.DB_MYDATA}`).collection(`${process.env.DB_COMMENTS}`);
     const themesCollection = client.db(`${process.env.DB_MYDATA}`).collection(`${process.env.DB_THEMES}`);
     const ordersCollection = client.db(`${process.env.DB_MYDATA}`).collection(`${process.env.DB_ORDERS}`);
     console.log("Mongodb database connect okay");
 
     // BLOGS ROUTES FUNCTIONS ----------------------------------------------------------------
+    // POST blogs to MDB cloud:
     app.post('/addBlogs', (req, res) => {
         const newBlogs = req.body;
         blogsCollection.insertOne(newBlogs)
@@ -68,8 +70,28 @@ client.connect(err => {
             })
     })
 
+    // COMMENTS ROUTES FUNCTIONS ----------------------------------------------------------------
+    // POST comment to MDB cloud:
+    app.post('/addComments', (req, res) => {
+        const newComment = req.body;
+        commentsCollection.insertOne(newComment)
+            .then(result => {
+                res.send(result.insertedCount > 0)
+            })
+    })
+
+    // GET specific blog comments (by blogID) from MDB cloud:
+    app.get('/comments', (req, res) => {
+        commentsCollection.find({})
+            .toArray((err, comments) => {
+                console.log(comments)
+                res.send(comments)
+            })
+    })
+
+
     // THEMES ROUTES FUNCTIONS ----------------------------------------------------------------
-    // POST thems to mongodb cloud:
+    // POST themes to mongodb cloud:
     app.post('/addThemes', (req, res) => {
         const newThemes = req.body;
         themesCollection.insertOne(newThemes)
@@ -88,7 +110,7 @@ client.connect(err => {
     })
 
     // ORDERS ROUTES FUNCTIONS ----------------------------------------------------------------
-    // Post order to the MDB cloud:
+    // POST order to the MDB cloud:
     app.post('/addOrder', (req, res) => {
         const newOrder = req.body;
         ordersCollection.insertOne(newOrder)
