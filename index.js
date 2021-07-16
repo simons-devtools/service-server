@@ -84,7 +84,6 @@ client.connect(err => {
     app.get('/comments', (req, res) => {
         commentsCollection.find({})
             .toArray((err, comments) => {
-                console.log(comments)
                 res.send(comments)
             })
     })
