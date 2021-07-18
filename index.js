@@ -34,13 +34,14 @@ client.connect(err => {
     const commentsCollection = client.db(`${process.env.DB_MYDATA}`).collection(`${process.env.DB_COMMENTS}`);
     const themesCollection = client.db(`${process.env.DB_MYDATA}`).collection(`${process.env.DB_THEMES}`);
     const ordersCollection = client.db(`${process.env.DB_MYDATA}`).collection(`${process.env.DB_ORDERS}`);
+    const adminsCollection = client.db(`${process.env.DB_MYDATA}`).collection(`${process.env.DB_ADMINS}`);
     console.log("Mongodb database connect okay");
 
     // BLOGS ROUTES FUNCTIONS ----------------------------------------------------------------
     // POST blogs to MDB cloud:
     app.post('/addBlogs', (req, res) => {
-        const newBlogs = req.body;
-        blogsCollection.insertOne(newBlogs)
+        const newBlog = req.body;
+        blogsCollection.insertOne(newBlog)
             .then(result => {
                 res.send(result.insertedCount > 0)
             })
@@ -92,10 +93,9 @@ client.connect(err => {
     // THEMES ROUTES FUNCTIONS ----------------------------------------------------------------
     // POST themes to mongodb cloud:
     app.post('/addThemes', (req, res) => {
-        const newThemes = req.body;
-        themesCollection.insertOne(newThemes)
+        const newTheme = req.body;
+        themesCollection.insertOne(newTheme)
             .then(result => {
-                // console.log('Result=', result);
                 res.send(result.insertedCount > 0)
             })
     })
@@ -109,7 +109,7 @@ client.connect(err => {
     })
 
     // ORDERS ROUTES FUNCTIONS ----------------------------------------------------------------
-    // POST order to the MDB cloud:
+    // POST orders to the MDB cloud:
     app.post('/addOrder', (req, res) => {
         const newOrder = req.body;
         ordersCollection.insertOne(newOrder)
@@ -117,8 +117,37 @@ client.connect(err => {
                 res.send(result.insertedCount > 0);
             })
     })
+
+    // GET all orders from the MDB cloud:
+    app.get('/orders', (req, res) => {
+        ordersCollection.find({})
+            .toArray((err, orders) => {
+                res.send(orders)
+            })
+    })
+
+    // ADMINS ROUTES FUNCTIONS ----------------------------------------------------------------
+    // POST admins to the MDB cloud:
+    app.post('/addAdmins', (req, res) => {
+        const newAdmin = req.body;
+        adminsCollection.insertOne(newAdmin)
+            .then(result => {
+                res.send(result.insertedCount > 0);
+            })
+    })
+    
+    // GET all admins from the MDB cloud:
+    app.get('/admins', (req, res) => {
+        adminsCollection.find({})
+            .toArray((err, admins) => {
+                res.send(admins)
+            })
+    })
+
+
+
+
+
+
 });
-
-
-
 app.listen(port);
