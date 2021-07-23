@@ -71,6 +71,37 @@ client.connect(err => {
             })
     })
 
+    // Patch/update to mongodb database: DashboardCode
+    app.patch("/updateBlog/:id", (req, res) => {
+        blogsCollection.updateOne(
+            { _id: ObjectId(req.params.id) },
+            {
+                $set: {
+                    title: req.body.title,
+                    category: req.body.category,
+                    author: req.body.author,
+                    date: req.body.date,
+                    image: req.body.image,
+                    description: req.body.description,
+                    topics: req.body.topics,
+                    tags: req.body.tags,
+                }
+            })
+            .then(result => {
+                console.log(result);
+                res.send(result.modifiedCount > 0);
+            })
+    })
+
+    // Delete one blog from MDB cloud: DashboardCode
+    app.delete('/deleteBlog/:id', (req, res) => {
+        blogsCollection.deleteOne({ _id: ObjectId(req.params.id) })
+            .then(result => {
+                // console.log(result);
+                res.send(result.deletedCount > 0);
+            })
+    })
+
     // COMMENTS ROUTES FUNCTIONS ----------------------------------------------------------------
     // POST comment to MDB cloud:
     app.post('/addComments', (req, res) => {
@@ -135,12 +166,44 @@ client.connect(err => {
                 res.send(result.insertedCount > 0);
             })
     })
-    
+
     // GET all admins from the MDB cloud:
     app.get('/admins', (req, res) => {
         adminsCollection.find({})
             .toArray((err, admins) => {
                 res.send(admins)
+            })
+    })
+
+    // Patch/update to mongodb database: DashboardCode
+    app.patch("/update/:id", (req, res) => {
+        productsCollection.updateOne(
+            { _id: ObjectId(req.params.id) },
+            {
+                $set: {
+                    name: req.body.name,
+                    price: req.body.price,
+                    group: req.body.group,
+                    key: req.body.key,
+                    seller: req.body.seller,
+                    author: req.body.author,
+                    category: req.body.category,
+                    collection: req.body.collection,
+                    date: req.body.date,
+                }
+            })
+            .then(result => {
+                // console.log(result);
+                res.send(result.modifiedCount > 0);
+            })
+    })
+
+    // Delete one product from MDB cloud: DashboardCode
+    app.delete('/deleteDataOne/:id', (req, res) => {
+        productsCollection.deleteOne({ _id: ObjectId(req.params.id) })
+            .then(result => {
+                // console.log(result);
+                res.send(result.deletedCount > 0);
             })
     })
 
