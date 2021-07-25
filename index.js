@@ -223,7 +223,6 @@ client.connect(err => {
                 }
             })
             .then(result => {
-                // console.log(result);
                 res.send(result.modifiedCount > 0);
             })
     })
@@ -232,7 +231,6 @@ client.connect(err => {
     app.delete('/deleteDataOne/:id', (req, res) => {
         productsCollection.deleteOne({ _id: ObjectId(req.params.id) })
             .then(result => {
-                // console.log(result);
                 res.send(result.deletedCount > 0);
             })
     })
