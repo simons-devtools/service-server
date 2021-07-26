@@ -187,6 +187,19 @@ client.connect(err => {
             })
     })
 
+    // Patch/update to mongodb database: DashboardCode
+    app.patch("/updateOrder/:id", (req, res) => {
+        ordersCollection.updateOne(
+            { _id: ObjectId(req.params.id) },
+            {
+                $set: { status: req.body.status }
+            }
+        )
+            .then(result => {
+                res.send(result.modifiedCount > 0);
+            })
+    })
+
     // ADMINS ROUTES FUNCTIONS ----------------------------------------------------------------
     // POST admins to the MDB cloud:
     app.post('/addAdmins', (req, res) => {
