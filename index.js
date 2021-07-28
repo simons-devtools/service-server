@@ -35,6 +35,7 @@ client.connect(err => {
     const themesCollection = client.db(`${process.env.DB_MYDATA}`).collection(`${process.env.DB_THEMES}`);
     const ordersCollection = client.db(`${process.env.DB_MYDATA}`).collection(`${process.env.DB_ORDERS}`);
     const adminsCollection = client.db(`${process.env.DB_MYDATA}`).collection(`${process.env.DB_ADMINS}`);
+    const contactsCollection = client.db(`${process.env.DB_MYDATA}`).collection(`${process.env.DB_CONTACTS}`);
     console.log("Mongodb database connect okay");
 
     // BLOGS ROUTES FUNCTIONS ----------------------------------------------------------------
@@ -245,6 +246,24 @@ client.connect(err => {
         productsCollection.deleteOne({ _id: ObjectId(req.params.id) })
             .then(result => {
                 res.send(result.deletedCount > 0);
+            })
+    })
+
+    // CONTACTS ROUTES FUNCTIONS ----------------------------------------------------------------
+    // POST contact to the MDB cloud:
+    app.post('/addContact', (req, res) => {
+        const newContact = req.body;
+        contactsCollection.insertOne(newContact)
+            .then(result => {
+                res.send(result.insertedCount > 0);
+            })
+    })
+
+    // GET all admins from the MDB cloud:
+    app.get('/contacts', (req, res) => {
+        contactsCollection.find({})
+            .toArray((err, contacts) => {
+                res.send(contacts)
             })
     })
 
