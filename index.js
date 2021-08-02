@@ -219,6 +219,15 @@ client.connect(err => {
             })
     })
 
+    // GET/Check admins account from MDB cloud:
+    app.post('/checkAdmins', (req, res) => {
+        const email = req.body.email;
+        adminsCollection.find({ email: email })
+            .toArray((err, admins) => {
+                res.send(admins.length > 0)
+            })
+    })
+
     // Patch/update to mongodb database: DashboardCode
     app.patch("/update/:id", (req, res) => {
         productsCollection.updateOne(
