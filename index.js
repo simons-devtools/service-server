@@ -182,10 +182,46 @@ client.connect(err => {
 
     // GET all orders from the MDB cloud:
     app.get('/orders', (req, res) => {
-        ordersCollection.find({})
-            .toArray((err, orders) => {
-                res.send(orders)
-            })
+        const bearer = (req.headers.authorization);
+        if (bearer && bearer.startsWith('Bearer ')) {
+            const idToken = bearer.split(' ')[1];
+            // console.log({ idToken });
+
+            // idToken comes from the client app
+            admin.auth().verifyIdToken(idToken)
+                .then((decodedToken) => {
+                    const tokenEmail = decodedToken.email;
+                    const queryEmail = req.query.email;
+                    // console.log(tokenEmail, queryEmail);
+
+                    if (tokenEmail == queryEmail) {
+                        adminsCollection.find({ email: queryEmail })
+                            .toArray((error, results) => {
+                                if (results.length === 0) {
+                                    ordersCollection.find({ email: queryEmail })
+                                        .toArray((err, documents) => {
+                                            res.status(200).send(documents);
+                                        })
+                                }
+                                else {
+                                    ordersCollection.find({})
+                                        .toArray((err, services) => {
+                                            res.send(services)
+                                        })
+                                }
+                            })
+                    }
+                    else {
+                        res.status(401).send('Unathorised access. Please try again letter!');
+                    }
+                })
+                .catch((error) => {
+                    res.status(401).send('Unathorised access. Please try again letter!');
+                });
+        }
+        else {
+            res.status(401).send('Unathorised access. Please try again letter!');
+        }
     })
 
     // Patch/update to mongodb database: DashboardCode
