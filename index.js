@@ -146,15 +146,16 @@ client.connect(err => {
                 $set: {
                     name: req.body.name,
                     price: req.body.price,
+                    brand: req.body.brand,
                     category: req.body.category,
                     author: req.body.author,
                     date: req.body.date,
-                    image: req.body.image,
+                    url: req.body.url,
                     detail: req.body.detail,
-                    features: req.body.features,
                     version: req.body.version,
+                    image: req.body.image,
                     discount: req.body.discount,
-                    brand: req.body.brand,
+                    features: req.body.features,
                 }
             })
             .then(result => {
@@ -261,36 +262,6 @@ client.connect(err => {
         adminsCollection.find({ email: email })
             .toArray((err, admins) => {
                 res.send(admins.length > 0)
-            })
-    })
-
-    // Patch/update to mongodb database: DashboardCode
-    app.patch("/update/:id", (req, res) => {
-        productsCollection.updateOne(
-            { _id: ObjectId(req.params.id) },
-            {
-                $set: {
-                    name: req.body.name,
-                    price: req.body.price,
-                    group: req.body.group,
-                    key: req.body.key,
-                    seller: req.body.seller,
-                    author: req.body.author,
-                    category: req.body.category,
-                    collection: req.body.collection,
-                    date: req.body.date,
-                }
-            })
-            .then(result => {
-                res.send(result.modifiedCount > 0);
-            })
-    })
-
-    // Delete one product from MDB cloud: DashboardCode
-    app.delete('/deleteDataOne/:id', (req, res) => {
-        productsCollection.deleteOne({ _id: ObjectId(req.params.id) })
-            .then(result => {
-                res.send(result.deletedCount > 0);
             })
     })
 
