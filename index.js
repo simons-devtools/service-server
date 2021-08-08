@@ -155,7 +155,9 @@ client.connect(err => {
                     version: req.body.version,
                     image: req.body.image,
                     discount: req.body.discount,
-                    features: req.body.features,
+                    relaced: req.body.relaced,
+                    react: req.body.react,
+                    code: req.body.code,
                 }
             })
             .then(result => {
