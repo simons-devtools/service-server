@@ -263,7 +263,7 @@ client.connect(err => {
         const email = req.body.email;
         adminsCollection.find({ email: email })
             .toArray((err, admins) => {
-                res.send(admins)
+                res.send(admins.length > 0)
             })
     })
 
