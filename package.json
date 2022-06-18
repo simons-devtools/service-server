@@ -1,7 +1,7 @@
 {
-  "name": "domainamexserver",
+  "name": "service-server",
   "version": "1.0.0",
-  "description": "",
+  "description": "This is service info api source file",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
